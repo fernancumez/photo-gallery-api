@@ -27,31 +27,53 @@ This project is built with
 - [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
 
-<!-- INSTALLATION -->
+<!-- GETTING STARTED -->
 
-## Installation
+## Getting started
 
-1. Clone project
+1. Prerequisites
+
+- npm
 
 ```
 git clone https://github.com/fernancumez/photo-gallery-api.git
 ```
 
-2. cd into folder
+2. Installation
+
+- Clone the repo
+
+```
+git clone https://github.com/fernancumez/photo-gallery-api.git
+```
+
+3. cd into folder
 
 ```
 cd photo-gallery-api
 ```
 
-3. Download dependencies
+4. Download dependencies
 
 ```
 npm install
 ```
 
+<!-- USAGE -->
+
 ## Usage
 
-1. Start server `npm run start`
+1. Run the application `npm run start`
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+1.  Fork the project
+2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the branch (`git push origin feature/AmazingFeature`)
+5.  Open a pull request
 
 ## License
 
