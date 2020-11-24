@@ -14,7 +14,22 @@
   </p>
 </p>
 
-## Instalación
+<!-- ABOUT THE PROJECT -->
+
+## About The Project
+
+### Built With
+
+This project is built with
+
+- [Typescript](https://www.typescriptlang.org/)
+- [NodeJs](https://nodejs.org/)
+- [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+
+<!-- INSTALLATION -->
+
+## Installation
 
 1. Clone project
 
