@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "watch": "tsc -w",
     "clean": "rimraf dist",
     "start": "npm run build && node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon dist/index.js",
+    "dev2": "nodemon --exec ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -22,10 +24,12 @@
   "homepage": "https://github.com/fernancumez/photo-gallery-api#readme",
   "dependencies": {
     "express": "4.17.1",
+    "mongoose": "^5.10.15",
     "morgan": "1.10.0"
   },
   "devDependencies": {
     "@types/express": "4.17.9",
+    "@types/mongoose": "^5.10.1",
     "@types/morgan": "1.9.2",
     "@types/node": "14.14.9",
     "nodemon": "2.0.6",
