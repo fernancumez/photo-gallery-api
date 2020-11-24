@@ -36,7 +36,7 @@ This project is built with
 - npm
 
 ```
-git clone https://github.com/fernancumez/photo-gallery-api.git
+npm install npm@latest -g
 ```
 
 2. Installation
