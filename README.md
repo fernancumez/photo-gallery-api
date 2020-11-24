@@ -63,8 +63,8 @@ npm install
 
 ## Usage
 
-1. Run the application `npm run start`
-2. Run `npm run watch` and `npm run dev` for development mode
+- Run the application `npm run start`
+- Run `npm run watch` and `npm run dev` for development mode
 
 <!-- CONTRIBUTING -->
 
