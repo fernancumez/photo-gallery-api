@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { IPhoto } from "../types/photo";
 import Photo from "../models/photo";
+import fs from "fs-extra";
+import path from "path";
 
 // Find a photo
 export const getPhoto = async (req: Request, res: Response): Promise<void> => {
@@ -74,10 +76,21 @@ export const updatePhotos = async (
 };
 
 // Delete photos
-export function deletePhotos(req: Request, res: Response): Response {
-  console.log(req.params.id);
+export const deletePhotos = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
 
-  return res.json({
-    message: "Photo successfully deleted",
-  });
-}
+    const photo: IPhoto | null = await Photo.findByIdAndRemove(id);
+
+    photo ? await fs.unlink(path.resolve(photo.imagePath)) : null;
+
+    res.status(200).json({
+      message: "Photo successfully deleted",
+    });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
