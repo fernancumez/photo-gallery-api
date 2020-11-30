@@ -1,15 +1,19 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model } from "mongoose";
+import { IPhoto } from "../types/photo";
 
-const schema = new Schema({
-  title: String,
-  description: String,
-  imagePath: String,
+const photoSchema: Schema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  imagePath: {
+    type: String,
+    required: true,
+  },
 });
 
-interface IPhoto extends Document {
-  title: string;
-  description: string;
-  imagePath: string;
-}
-
-export default model<IPhoto>("Photo", schema);
+export default model<IPhoto>("Photo", photoSchema);
