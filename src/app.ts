@@ -1,14 +1,17 @@
 import express from "express";
 import morgan from "morgan";
 import indexRoutes from "./routes";
+import config from "./config";
 import path from "path";
 
+// Initializations
 const app = express();
+const { PORT } = config;
 
 // Settings
-app.set("port", process.env.PORT || 4000);
+app.set("port", PORT);
 
-// Middleware
+// Middlewares
 app.use(morgan("dev"));
 app.use(express.json());
 

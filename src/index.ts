@@ -1,11 +1,20 @@
+import config from "./config";
+const { NODE_ENV } = config;
+
+NODE_ENV !== "production" ? require("dotenv").config() : "";
+
 import app from "./app";
 import { startConection } from "./database";
 
-async function main() {
-  startConection();
-  await app.listen(app.get("port"));
-  console.log(`Server on port ${app.get("port")}`);
-  console.log("yea bitch");
-}
+const main = async () => {
+  try {
+    startConection();
+
+    await app.listen(app.get("port"));
+    console.log(`Server on port ${app.get("port")}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 main();

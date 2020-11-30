@@ -1,13 +1,16 @@
-import { connect } from "mongoose";
+import { connect, ConnectionOptions } from "mongoose";
+import config from "./config";
 
 export async function startConection() {
   // Option db connections
-  const options = {
+  const dbOptions: ConnectionOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
 
-  // DB conection
-  await connect("mongodb://localhost/photo-gallery", options);
+  // DB connection
+  const { DATABASE } = config;
+
+  await connect(DATABASE.URI, dbOptions);
   console.log("Database is connected!");
 }
