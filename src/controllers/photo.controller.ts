@@ -3,12 +3,16 @@ import { IPhoto } from "../types/photo";
 import Photo from "../models/photo";
 
 // Find a photo
-export function getPhoto(req: Request, res: Response): Response {
-  console.log(req.params.id);
-  return res.json({
-    message: "Photo successfully find",
-  });
-}
+export const getPhoto = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const photo: IPhoto | null = await Photo.findById(id);
+
+    res.status(200).json(photo);
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
 
 // List all photos
 export const getPhotos = async (req: Request, res: Response): Promise<void> => {
