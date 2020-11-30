@@ -10,12 +10,15 @@ export function getPhoto(req: Request, res: Response): Response {
   });
 }
 
-// Get all photos
-export function getPhotos(req: Request, res: Response): Response {
-  return res.json({
-    message: "Photos successfully list",
-  });
-}
+// List all photos
+export const getPhotos = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const photos: IPhoto[] = await Photo.find();
+    res.status(200).json({ photos });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
 
 // Create new photos
 export const createPhotos = async (
@@ -38,7 +41,7 @@ export const createPhotos = async (
       message: "Photo successfully saved",
     });
   } catch (err) {
-    console.error(err);
+    res.status(400).json({ error: err });
   }
 };
 
