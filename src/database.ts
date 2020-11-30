@@ -6,6 +6,7 @@ export async function startConection() {
   const dbOptions: ConnectionOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   };
 
   // DB connection

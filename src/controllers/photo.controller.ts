@@ -50,13 +50,28 @@ export const createPhotos = async (
 };
 
 // Update photos
-export function updatePhotos(req: Request, res: Response): Response {
-  console.log(req.params.id);
+export const updatePhotos = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id: _id } = req.params;
+    const { title, description } = req.body as Pick<
+      IPhoto,
+      "title" | "description"
+    >;
 
-  return res.json({
-    message: "Photo successfully updated",
-  });
-}
+    const body = { title, description };
+
+    await Photo.findByIdAndUpdate({ _id }, body);
+
+    res.status(200).json({
+      message: "Photo successfully updated",
+    });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
 
 // Delete photos
 export function deletePhotos(req: Request, res: Response): Response {
