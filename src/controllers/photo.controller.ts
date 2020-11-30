@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import { IPhoto } from "../types/photo";
+import Photo from "../models/photo";
 
 // Find a photo
 export function getPhoto(req: Request, res: Response): Response {
@@ -16,13 +18,29 @@ export function getPhotos(req: Request, res: Response): Response {
 }
 
 // Create new photos
-export function createPhotos(req: Request, res: Response): Response {
-  console.log(req.body);
+export const createPhotos = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { title, description } = req.body as Pick<
+      IPhoto,
+      "title" | "description"
+    >;
+    const { path: imagePath } = req.file;
 
-  return res.json({
-    message: "Photo successfully saved",
-  });
-}
+    const newPhoto = { title, description, imagePath };
+
+    const photo: IPhoto = new Photo(newPhoto);
+    await photo.save();
+
+    res.status(200).json({
+      message: "Photo successfully saved",
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 // Update photos
 export function updatePhotos(req: Request, res: Response): Response {
