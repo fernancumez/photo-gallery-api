@@ -67,3 +67,19 @@ export const updateUser = async (
     res.status(400).json({ error: err });
   }
 };
+
+// Delete User
+export const deleteUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    await User.findByIdAndRemove(id);
+
+    res.status(200).json({ message: "User successfully deleted" });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
