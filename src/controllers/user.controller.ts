@@ -13,3 +13,25 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ error: err });
   }
 };
+
+// Create new User
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { firstName, lastName, email, password } = req.body as Pick<
+      IUser,
+      "firstName" | "lastName" | "email" | "password"
+    >;
+
+    const newUser = { firstName, lastName, email, password };
+
+    const user: IUser = new User(newUser);
+    await user.save();
+
+    res.status(200).json({ message: "User successfully saved " });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
