@@ -45,3 +45,25 @@ export const createUser = async (
     res.status(400).json({ error: err });
   }
 };
+
+// Update user
+export const updateUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id: _id } = req.params;
+    const { firstName, lastName, email, password } = req.body as Pick<
+      IUser,
+      "firstName" | "lastName" | "email" | "password"
+    >;
+
+    const updateUser = { firstName, lastName, email, password };
+
+    await User.findByIdAndUpdate({ _id }, updateUser);
+
+    res.status(200).json({ message: "User successfully updated" });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
