@@ -1,10 +1,11 @@
 import config from "./config";
-const { NODE_ENV } = config;
-
-NODE_ENV !== "production" ? require("dotenv").config() : "";
-
+import dotenv from "dotenv";
 import app from "./app";
+
+const { NODE_ENV } = config;
 import { startConection } from "./database";
+
+NODE_ENV !== "production" ? dotenv.config() : null;
 
 const main = async () => {
   try {
