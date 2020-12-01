@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
-import indexRoutes from "./routes";
+import photoRoutes from "./routes/photo";
+import userRoutes from "./routes/user";
 import config from "./config";
 import path from "path";
 
@@ -16,7 +17,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // Routes
-app.use("/api", indexRoutes);
+app.use("/api/photos", photoRoutes);
+app.use("/api/users", userRoutes);
 
 // This folder for this application will be used to store public files
 app.use("/uplads", express.static(path.resolve("uploads")));
