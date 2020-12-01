@@ -1,7 +1,7 @@
 import { connect, ConnectionOptions } from "mongoose";
 import config from "./config";
 
-export async function startConection() {
+export const startConection = async () => {
   // Option db connections
   const dbOptions: ConnectionOptions = {
     useNewUrlParser: true,
@@ -14,4 +14,4 @@ export async function startConection() {
 
   await connect(DATABASE.URI, dbOptions);
   console.log("Database is connected!");
-}
+};
