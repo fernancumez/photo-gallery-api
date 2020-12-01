@@ -14,6 +14,16 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// List all users
+export const getUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users: IUser[] = await User.find();
+    res.status(200).json({ users });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+};
+
 // Create new User
 export const createUser = async (
   req: Request,
