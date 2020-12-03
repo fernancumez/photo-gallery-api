@@ -1,9 +1,13 @@
 import express from "express";
 import morgan from "morgan";
+import path from "path";
+import cors from "cors";
+import passport from "passport";
+import passportMiddleware from "./middlewares/passport";
 import photoRoutes from "./routes/photo";
 import userRoutes from "./routes/user";
+import authRoutes from "./routes/auth";
 import config from "./config";
-import path from "path";
 
 // Initializations
 const app = express();
@@ -14,9 +18,14 @@ app.set("port", PORT);
 
 // Middlewares
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+passport.use(passportMiddleware);
 
 // Routes
+app.use("/api/", authRoutes);
 app.use("/api/photos", photoRoutes);
 app.use("/api/users", userRoutes);
 
