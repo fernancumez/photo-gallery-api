@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "passport";
 import {
   getPhoto,
   getPhotos,
@@ -9,9 +10,20 @@ import {
 
 import multer from "../libs/multer";
 
-const router = Router();
+const router: Router = Router();
 
-router.route("/").get(getPhotos).post(multer.single("image"), createPhotos);
-router.route("/:id").get(getPhoto).put(updatePhotos).delete(deletePhotos);
+router
+  .route("/")
+  .get(passport.authenticate("jwt", { session: false }), getPhotos)
+  .post(
+    passport.authenticate("jwt", { session: false }),
+    multer.single("image"),
+    createPhotos
+  );
+router
+  .route("/:id")
+  .get(passport.authenticate("jwt", { session: false }), getPhoto)
+  .put(passport.authenticate("jwt", { session: false }), updatePhotos)
+  .delete(passport.authenticate("jwt", { session: false }), deletePhotos);
 
 export default router;

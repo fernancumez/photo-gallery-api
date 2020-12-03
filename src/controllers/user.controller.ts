@@ -25,10 +25,7 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Create new User
-export const createUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createUser = async (req: Request, res: Response): Promise<any> => {
   try {
     const { firstName, lastName, email, password } = req.body as Pick<
       IUser,
@@ -37,6 +34,13 @@ export const createUser = async (
 
     const newUser = { firstName, lastName, email, password };
 
+    // Verify in the db if the user exist
+    const findUser = await User.findOne({ email });
+
+    if (findUser)
+      return res.status(400).json({ message: "The user already exists" });
+
+    // If the user doesn´t exists, it will be created.
     const user: IUser = new User(newUser);
     await user.save();
 
