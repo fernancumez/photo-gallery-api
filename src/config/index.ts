@@ -1,6 +1,4 @@
-import { IConfig } from "../types/config";
-
-const Config: IConfig = {
+const Config = {
   DATABASE: {
     URI: process.env.MONGODB_URI || "mongodb://localhost/photo-gallery",
     USER: process.env.USER || "fernando",
