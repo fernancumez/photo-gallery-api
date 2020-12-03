@@ -1,7 +1,8 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, HookNextFunction } from "mongoose";
 import { IUser } from "../types/user";
+import bcrypt from "bcrypt";
 
-const userSchema = new Schema({
+const userSchema: Schema<any> = new Schema({
   firstName: {
     type: String,
     required: String,
@@ -22,5 +23,25 @@ const userSchema = new Schema({
     required: true,
   },
 });
+
+userSchema.pre<IUser>(
+  "save",
+  async function (this: IUser, next: HookNextFunction): Promise<any> {
+    const user: IUser = this;
+    if (!user.isModified("password")) return next();
+
+    const salt: string = await bcrypt.genSalt(10);
+    const hash: string = await bcrypt.hash(user.password, salt);
+
+    user.password = hash;
+    next();
+  }
+);
+
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
+};
 
 export default model<IUser>("User", userSchema);

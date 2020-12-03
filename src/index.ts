@@ -1,13 +1,13 @@
 import config from "./config";
-import dotenv from "dotenv";
+import { config as dotEnvConfig } from "dotenv";
 import app from "./app";
 
 const { NODE_ENV } = config;
 import { startConection } from "./database";
 
-NODE_ENV !== "production" ? dotenv.config() : null;
+NODE_ENV !== "production" ? dotEnvConfig() : "";
 
-const main = async () => {
+const main = async (): Promise<void> => {
   try {
     startConection();
 
