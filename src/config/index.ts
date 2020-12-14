@@ -1,3 +1,7 @@
+import { config } from "dotenv";
+
+process.env.NODE_ENV !== "production" ? config() : null;
+
 const Config = {
   DATABASE: {
     URI: process.env.MONGODB_URI || "mongodb://localhost/photo-gallery",
