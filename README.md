@@ -26,6 +26,8 @@ This project is built with
 - [NodeJs](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
+- [Passport](http://www.passportjs.org/)
+- [JWT](https://jwt.io/)
 
 <!-- GETTING STARTED -->
 
@@ -66,15 +68,7 @@ npm install
 - Run the application `npm run start`
 - Run `npm run watch` and `npm run dev` for development mode
 
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-1.  Fork the project
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the branch (`git push origin feature/AmazingFeature`)
-5.  Open a pull request
+<!-- LICENSE -->
 
 ## License
 
@@ -92,4 +86,4 @@ Project Link: [https://github.com/fernancumez/photo-gallery-api.git](https://git
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
-[license-url]: https://github.com/fernancumez/dino-chrome/blob/main/LICENSE
+[license-url]: https://github.com/fernancumez/photo-gallery-api/blob/main/LICENSE
