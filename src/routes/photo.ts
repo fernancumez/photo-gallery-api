@@ -1,5 +1,4 @@
 import { Router } from "express";
-import passport from "passport";
 import {
   getPhoto,
   getPhotos,
@@ -9,21 +8,19 @@ import {
 } from "../controllers/photo.controller";
 
 import multer from "../libs/multer";
+import auth from "../middlewares/auth";
 
 const router: Router = Router();
 
 router
   .route("/")
-  .get(passport.authenticate("jwt", { session: false }), getPhotos)
-  .post(
-    passport.authenticate("jwt", { session: false }),
-    multer.single("image"),
-    createPhotos
-  );
+  .get(auth, getPhotos)
+  .post(auth, multer.single("image"), createPhotos);
+
 router
   .route("/:id")
-  .get(passport.authenticate("jwt", { session: false }), getPhoto)
-  .put(passport.authenticate("jwt", { session: false }), updatePhotos)
-  .delete(passport.authenticate("jwt", { session: false }), deletePhotos);
+  .get(auth, getPhoto)
+  .put(auth, updatePhotos)
+  .delete(auth, deletePhotos);
 
 export default router;

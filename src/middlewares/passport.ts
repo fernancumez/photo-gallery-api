@@ -11,11 +11,11 @@ const opts: StrategyOptions = {
 
 export default new Strategy(opts, async (payload, done) => {
   try {
-    const user = await User.findById(payload.id);
+    const user = await User.findById(payload.id, { password: 0 });
     if (user) return done(null, user);
 
     return done(null, false);
   } catch (err) {
-    console.error(err);
+    return done(err, false);
   }
 });

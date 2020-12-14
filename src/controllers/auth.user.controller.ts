@@ -4,13 +4,12 @@ import jwt from "jsonwebtoken";
 import config from "../config";
 import User from "../models/user";
 
-const { JWT_KEY } = config;
-
 // Token creation
 function createToken(user: IUser): string {
-  return jwt.sign({ id: user.id, email: user.email }, JWT_KEY, {
-    expiresIn: 86400, // 1 day
-  });
+  const payload = { id: user.id, email: user.email };
+  const options = { expiresIn: 86400 }; // 1 day
+
+  return jwt.sign(payload, config.JWT_KEY, options);
 }
 
 export const authenticateUser = async (
