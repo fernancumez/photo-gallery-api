@@ -12,26 +12,32 @@ function createToken(user: IUser): string {
   return jwt.sign(payload, config.JWT_KEY, options);
 }
 
-export const authenticateUser = async (
+const authenticateUser = async (
   req: Request,
   res: Response
-): Promise<Response<any> | undefined> => {
+): Promise<Response> => {
   try {
     const { email, password } = req.body as Pick<IUser, "email" | "password">;
 
     // Verify that the user is registered.
     const user = await User.findOne({ email });
     if (!user)
-      return res.status(400).json({ message: "The user does not exist" });
+      return res.status(404).json({ message: "The user does not exist" });
 
     // Check if the password is correct
     const isMatch = await user.comparePassword(password);
-    if (isMatch) return res.status(200).json({ token: createToken(user) });
 
+    // If the password isn´t correct
+    if (!isMatch)
+      return res.status(400).json({ message: "The password isn´t incorrect" });
+
+    // If the password is correct
     return res
-      .status(400)
-      .json({ message: "The email or password are incorrect" });
-  } catch (err) {
-    res.status(400).json({ error: err });
+      .status(200)
+      .json({ message: "SignIn successfully", token: createToken(user) });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
+
+export { authenticateUser };
