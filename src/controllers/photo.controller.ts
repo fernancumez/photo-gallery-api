@@ -5,32 +5,36 @@ import fs from "fs-extra";
 import path from "path";
 
 // Find a photo
-export const getPhoto = async (req: Request, res: Response): Promise<void> => {
+const getPhoto = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
+
+    // Sentence to search the photo in the database
     const photo: IPhoto | null = await Photo.findById(id);
 
-    res.status(200).json(photo);
-  } catch (err) {
-    res.status(400).json({ error: err });
+    // If the resource does not exist
+    if (!photo) return res.status(404).json({ error: "Photo not found" });
+
+    // If the photo exist
+    return res.status(200).json(photo);
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
 
 // List all photos
-export const getPhotos = async (req: Request, res: Response): Promise<void> => {
+const getPhotos = async (req: Request, res: Response): Promise<Response> => {
   try {
+    // Sentence to search all the photos in the database
     const photos: IPhoto[] = await Photo.find();
-    res.status(200).json({ photos });
-  } catch (err) {
-    res.status(400).json({ error: err });
+    return res.status(200).json({ photos });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
 
 // Create new photos
-export const createPhotos = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+const createPhotos = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { title, description } = req.body as Pick<
       IPhoto,
@@ -38,59 +42,69 @@ export const createPhotos = async (
     >;
     const { path: imagePath } = req.file;
 
-    const newPhoto = { title, description, imagePath };
+    const body = { title, description, imagePath };
 
-    const photo: IPhoto = new Photo(newPhoto);
-    await photo.save();
+    const newPhoto: IPhoto = new Photo(body);
 
-    res.status(200).json({
+    // Save the new item
+    await newPhoto.save();
+
+    return res.status(201).json({
       message: "Photo successfully saved",
+      photo: newPhoto,
     });
-  } catch (err) {
-    res.status(400).json({ error: err });
+  } catch (error) {
+    return res.status(400).json(error);
   }
 };
 
 // Update photos
-export const updatePhotos = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+const updatePhotos = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id: _id } = req.params;
-    const { title, description } = req.body as Pick<
-      IPhoto,
-      "title" | "description"
-    >;
 
-    const body = { title, description };
+    const updatePhoto: IPhoto | null = await Photo.findByIdAndUpdate(
+      { _id },
+      req.body
+    );
 
-    await Photo.findByIdAndUpdate({ _id }, body);
+    // If the resource does not exisit
+    if (!updatePhoto) return res.status(404).json({ error: "Photo not found" });
 
-    res.status(200).json({
+    // If the resource exist
+    const photoUpdated: IPhoto | null = await Photo.findById(_id);
+
+    return res.status(200).json({
       message: "Photo successfully updated",
+      photo: photoUpdated,
     });
-  } catch (err) {
-    res.status(400).json({ error: err });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
 
 // Delete photos
-export const deletePhotos = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+const deletePhotos = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
 
-    const photo: IPhoto | null = await Photo.findByIdAndRemove(id);
+    // Delete the item in the database
+    const photoDeleted: IPhoto | null = await Photo.findByIdAndRemove(id);
 
-    photo ? await fs.unlink(path.resolve(photo.imagePath)) : null;
+    if (photoDeleted) {
+      // Delete the file in the os
+      await fs.unlink(path.resolve(photoDeleted.imagePath));
+    } else {
+      return res.status(404).json({ error: "Photo not found" });
+    }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Photo successfully deleted",
+      photo: photoDeleted,
     });
-  } catch (err) {
-    res.status(400).json({ error: err });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
+
+export { getPhoto, getPhotos, createPhotos, updatePhotos, deletePhotos };
