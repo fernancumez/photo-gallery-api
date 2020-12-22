@@ -3,87 +3,101 @@ import { Request, Response } from "express";
 import User from "../models/user";
 
 // Find User
-export const getUser = async (req: Request, res: Response): Promise<void> => {
+const getUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
 
+    // Sentence to search the user in the database
     const user: IUser | null = await User.findById(id);
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(400).json({ error: err });
+
+    // If the resource does not exist
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // If the user exist
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
 
 // List all users
-export const getUsers = async (req: Request, res: Response): Promise<void> => {
+const getUsers = async (req: Request, res: Response): Promise<Response> => {
   try {
+    // Sentence to search all the users in the database
+
     const users: IUser[] = await User.find();
-    res.status(200).json({ users });
-  } catch (err) {
-    res.status(400).json({ error: err });
+    return res.status(200).json({ users });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
 
 // Create new User
-export const createUser = async (req: Request, res: Response): Promise<any> => {
+const createUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { firstName, lastName, email, password } = req.body as Pick<
       IUser,
       "firstName" | "lastName" | "email" | "password"
     >;
 
-    const newUser = { firstName, lastName, email, password };
+    const body = { firstName, lastName, email, password };
 
     // Verify in the db if the user exist
     const findUser = await User.findOne({ email });
 
     if (findUser)
-      return res.status(400).json({ message: "The user already exists" });
+      return res.status(400).json({ error: "The user already exists" });
 
     // If the user doesn´t exists, it will be created.
-    const user: IUser = new User(newUser);
-    await user.save();
+    const newUser: IUser = new User(body);
+    await newUser.save();
 
-    res.status(200).json({ message: "User successfully saved " });
-  } catch (err) {
-    res.status(400).json({ error: err });
+    return res
+      .status(201)
+      .json({ message: "User successfully saved", user: newUser });
+  } catch (error) {
+    return res.status(400).json(error);
   }
 };
 
 // Update user
-export const updateUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+const updateUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id: _id } = req.params;
-    const { firstName, lastName, email, password } = req.body as Pick<
-      IUser,
-      "firstName" | "lastName" | "email" | "password"
-    >;
 
-    const updateUser = { firstName, lastName, email, password };
+    const updateUser: IUser | null = await User.findByIdAndUpdate(
+      { _id },
+      req.body
+    );
 
-    await User.findByIdAndUpdate({ _id }, updateUser);
+    // If the resource does not exisit
+    if (!updateUser) return res.status(404).json({ error: "User not found" });
 
-    res.status(200).json({ message: "User successfully updated" });
-  } catch (err) {
-    res.status(400).json({ error: err });
+    // If the resource exist
+    const userUpdated: IUser | null = await User.findById(_id);
+
+    return res
+      .status(200)
+      .json({ message: "User successfully updated", user: userUpdated });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
 
 // Delete User
-export const deleteUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+const deleteUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
 
-    await User.findByIdAndRemove(id);
+    const userDeleted: IUser | null = await User.findByIdAndRemove(id);
+    if (!userDeleted) return res.status(404).json({ error: "User not found" });
 
-    res.status(200).json({ message: "User successfully deleted" });
-  } catch (err) {
-    res.status(400).json({ error: err });
+    return res
+      .status(200)
+      .json({ message: "User successfully deleted", user: userDeleted });
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
+
+export { getUser, getUsers, createUser, updateUser, deleteUser };
